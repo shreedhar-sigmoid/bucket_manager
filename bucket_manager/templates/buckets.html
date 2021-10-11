@@ -1,0 +1,31 @@
+{% extends "layout.html" %} 
+{% block content%}
+<div class="container"></div>
+    <h1>Buckets list</h1>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th  class="table-dark" scope="col">BUCKET NAME</th>
+          <th  class="table-dark"scope="col">CREATED</th>
+          <th  class="table-dark"scope="col"></th>
+        </tr>
+      </thead>
+      {% for bucket in buckets_list.Buckets%}
+      <tbody>
+        <tr>
+          <th  class="table-light" scope="row">{{bucket.Name}}</th>
+          <td class="table-light" >{{bucket.CreationDate | datetimeformat}}</td>
+          <td class="table-light" >
+            <form action="{{ url_for('folders',bucket_name = bucket.Name)}}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" value="{{ bucket['Name'] }}" name="bucket"/>
+            {{form.bucket_name(value=bucket['Name'])}}
+            {{form.submit(class= "btn btn-sm btn-outline-dark")}}
+          </form>
+        </td>
+        </tr>
+      </tbody>
+      {%endfor%}
+    </table>
+  
+  </div>
+{% endblock%}

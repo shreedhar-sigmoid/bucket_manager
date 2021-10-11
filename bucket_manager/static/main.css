@@ -1,0 +1,12 @@
+.dropdown_model{
+    overflow-y:inherit !important;
+}
+.nabar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.containerclass{
+    padding-top: 50px;
+}

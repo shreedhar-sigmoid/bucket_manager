@@ -1,0 +1,32 @@
+{% extends "layout.html" %} 
+{% block content%}
+    <div>
+        <div>
+            <Button type="button" class="btn btn-outline-dark"data-bs-toggle="modal" data-bs-target="#staticBackdrop">Regiter</Button>
+            <!-- modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Register</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="upload-form" action="" method="POST" enctype="multipart/form-data">
+                            <label for="">Access_id:</label><br>
+                            <input type="text" placeholder="Enter your access_id"  name = "access_id" value="" required /> <br>
+                            <label for="">Access_key:</label><br>
+                            <input type="text" placeholder="Enter your access_key"  name = "access_key" value="" required />
+                          <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-outline-dark">Register</button>
+                          </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <div>
+            <button class="btn btn-dark">Login</button>
+        </div>
+    </div>
+{% endblock%}
