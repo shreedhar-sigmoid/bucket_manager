@@ -19,3 +19,4 @@ class RenameFileForm(FlaskForm):
     folder_name = HiddenField('folder_name')
     new_name = StringField('new_name')
     submit = SubmitField('Rename')
+    

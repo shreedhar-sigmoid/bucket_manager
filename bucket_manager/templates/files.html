@@ -26,13 +26,14 @@
                 <th class="table-dark" scope="col">Size</th>
                 <th class="table-dark" scope="col">Rename</th>
                 <th class="table-dark" scope="col">Copy</th>
+                <th class="table-dark" scope="col">Move</th>
                 <th class="table-dark" scope="col">Delete</th>
               </tr>
             </thead>
             <tbody>
-
                 {% if "Contents" in files_list  %}
             {% for file in files_list["Contents"] %}
+            {% if file.Key != files_list['Prefix'] %}
             <tr>
                 <td class="table-light" scope="row">{{ file_names[loop.index] }}</td>
                 <td class="table-light">{{ file.Size | file_size }}</td>
@@ -69,7 +70,7 @@
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Copy a file to another bucket</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Make copy a file to another bucket</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body dropdown_model">
@@ -78,7 +79,7 @@
                       <input type="hidden"  value="{{ files_list['Prefix'] }}" name = "folder_name" />
                       <input type="hidden"  value="{{ file.Key }}" name = "source_key"  />
                       <label for="fname">Destination Bucket name:</label>
-                      <select class="form-select" aria-label="Default select example" name="other_bucket">
+                      <select class="form-select" aria-label="Default select example" name="other_bucket" required>
                         <option selected>selcect the bucket</option>
                         {% for bucket in buckets_list %}
                            {% if bucket !=files_list['Name'] %}
@@ -86,12 +87,48 @@
                            {% endif %}
                           {% endfor %}
                       </select><br>
-                      <label for="fname">File name in destination:</label><br>
-                      <input type="text"  placeholder="Enter filename for destination" name = "otherkey" value="" />
-                       
+                      <label for="fname">folder name in destination:</label><br>
+                      <input type="hidden"  name = "otherkey" value="{{ file_names[loop.index] }}" />
+                      <input type="text"  placeholder="Enter folder name for destination" name = "other_folder" value="" required/>  
                     <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-outline-dark"> Make a copy</button>
+                    </div>
+                </form>
+                </div>
+                </div>
+                </div>
+            </div> 
+            </td>
+            <td class="table-light">
+              <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#movemodal-{{ loop.index }}" >Move</button>
+               <!-- model to move file from one bucket to another-->
+               <div class="modal fade" id="movemodal-{{ loop.index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Move file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body dropdown_model">
+                    <form class="upload-form" action="{{ url_for('movefile') }}" method="POST" enctype="multipart/form-data">
+                      <input type="hidden"  value="{{ files_list['Name'] }}" name = "source_bucket" />
+                      <input type="hidden"  value="{{ files_list['Prefix'] }}" name = "folder_name" />
+                      <input type="hidden"  value="{{ file.Key }}" name = "source_key"  />
+                      <label for="fname">Destination Bucket name:</label>
+                      <select class="form-select" aria-label="Default select example" name="other_bucket" required>
+                        <option selected>selcect the bucket</option>
+                        {% for bucket in buckets_list %}
+                           {% if bucket !=files_list['Name'] %}
+                          <option value="{{ bucket }}">{{bucket}}</option>
+                           {% endif %}
+                          {% endfor %}
+                      </select><br>
+                      <label for="fname">folder name in destination:</label><br>
+                      <input type="text"  placeholder="Enter filename for destination" name = "other_folder" value="" required/>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-dark">Move file</button>
                     </div>
                 </form>
                 </div>
@@ -124,9 +161,7 @@
                 </div>
                 </div>
             </div> 
-
             </td>
-               <!--  -->
               </tr>
               <!-- model for upload file -->
               <div class="modal fade" id="uploadmodel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -138,11 +173,9 @@
                     </div>
                     <div class="modal-body dropdown_model">
                     <form class="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-                      
                       <p><input type="file" name="file_name"></p>
                       <input type="hidden"  value="{{ files_list['Name'] }}" name = "bucket_name" />
                       <input type="hidden"  value="{{ files_list['Prefix'] }}" name = "folder_name" />
-
                     <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-outline-dark">Upload</button>
@@ -152,8 +185,6 @@
                 </div>
                 </div>
             </div> 
-              <!-- model for rename a file -->
-              
               <!-- model to copy file from one bucket to another-->
               <div class="modal fade" id="copymodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -172,7 +203,6 @@
                       <input type="text"  placeholder="Enter destination buket name" name = "otherbucket" value="" />
                       <label for="fname">File name in destination:</label>
                       <input type="text"  placeholder="Enter filename for destination" name = "otherkey" value="" />
-                       
                     <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-outline-dark"> Make a copy</button>
@@ -204,11 +234,7 @@
                 </div>
                 </div>
             </div> 
-              <!--  -->
-              <!--  -->
-              <!--  -->
-              <!--  -->
-              
+              {% endif %}
             {%endfor%}
             {%else%}
             <div class= "container">
@@ -219,4 +245,3 @@
           </table>
       </div>
 {% endblock%}
-

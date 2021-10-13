@@ -36,7 +36,6 @@
           <td class="table-light"><a href="{{ url_for('files', bucket_name=bucket_name,folder_name=folder) }}" class="btn btn-sm btn-outline-dark">Open</a></td>
           <td class="table-light" >
             <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletemodal-{{ loop.index }}" >Delete</button>
-
             <div class="modal fade" id="deletemodal-{{ loop.index }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog">
               <div class="modal-content">
@@ -73,7 +72,6 @@
               <input type="hidden"  value="{{bucket_name}}" name = "bucket_name" />
               <label>Folder name</label>
               <input type="text" placeholder="Enter new folder name" value="" name = "folder_name" required />
-
               <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-outline-dark">Create</button>
@@ -83,7 +81,6 @@
           </div>
           </div>
       </div> 
-        <!--  -->
        {%endfor%}
       {%else%}
     </tbody>
@@ -91,6 +88,5 @@
       <div class= "container">
         <h1>empty</h1> 
       </div>          
-        {%endif%}
-           
+        {%endif%}        
 {% endblock%}

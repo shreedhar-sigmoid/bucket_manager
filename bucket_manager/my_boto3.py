@@ -3,10 +3,8 @@ from botocore.exceptions import ClientError
 import os.path
 import boto3
 
-
 s3_client = client('s3')
 s3_resource = resource('s3')
-
 
 def fetch_all_buckets():
     try:
@@ -27,7 +25,6 @@ def fetch_bucket_details(bucket_name):
     except ClientError as err:
         return err
 
-
 def fetch_folder_details(bucket_name,folder_name):
     try:
 
@@ -46,7 +43,6 @@ def upload_file(file_name,bucket,key, args=None):
         return s3_client.upload_fileobj(file_name,bucket,key, ExtraArgs=args) 
     except  ClientError as err:
         return err
-
 
 def delete_file(bucket,key):
 
@@ -69,20 +65,25 @@ def rename_file(bucket_name,folder_name,new_name,old_name):
     except ClientError as err:
         return err
 
-# copy a file from on bucket to another
-
-def copy_to_bucket(source_bucket,source_key,otherbucket,otherkey):
+def copy_to_bucket(source_bucket,source_key,otherbucket,otherkey = None):
     try:
-        copy_source = {
+        if otherkey == None:
+            otherkey = source_key
+            copy_source = {
                 "Bucket": source_bucket,
                 "Key" : source_key
             }
-        response = s3_resource.meta.client.copy(copy_source,otherbucket,otherkey)
+            response = s3_resource.meta.client.copy(copy_source,otherbucket,otherkey)
+        else: 
+            copy_source = {
+                    "Bucket": source_bucket,
+                    "Key" : source_key
+                }
+            response = s3_resource.meta.client.copy(copy_source,otherbucket,otherkey)
         return response
     except ClientError as err:
         return err
 
-# to create folder
 
 def create_folder(bucket_name,dir_name):
         try:
@@ -90,7 +91,6 @@ def create_folder(bucket_name,dir_name):
         except ClientError as err:
             return err
 
-# to delete folder
 
 def delete_folder(bucket_name, dir_name): 
       try:
@@ -112,3 +112,4 @@ def register(access_id , access_key):
             return "You have enter wrong keys"
     except:
          return "You have enter wrong keys"
+         

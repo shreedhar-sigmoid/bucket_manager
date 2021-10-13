@@ -3,7 +3,6 @@ import mimetypes
 import arrow
 from hurry.filesize import size, si
 
-
 additional_file_types = {
     '.md': 'text/markdown'
 }
@@ -14,7 +13,6 @@ def file_size(file_size):
 def datetimeformat(date_str):
     dt = arrow.get(date_str)
     return dt.humanize()
-
 
 def file_type(key):
     file_info = os.path.splitext(key)
@@ -30,3 +28,4 @@ def file_type(key):
             filetype = additional_file_types[file_extension]
 
         return filetype
+        
